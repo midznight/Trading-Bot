@@ -14,9 +14,12 @@ interface StockChartProps {
     tp: number;
     sl: number;
   };
+  fibonacci?: {
+    [key: string]: number;
+  };
 }
 
-export const StockChart: React.FC<StockChartProps> = ({ data, signal }) => {
+export const StockChart: React.FC<StockChartProps> = ({ data, signal, fibonacci }) => {
   const isUp = data.length > 1 ? data[data.length - 1].price >= data[0].price : true;
   const color = isUp ? "#10b981" : "#f43f5e";
 
@@ -76,6 +79,24 @@ export const StockChart: React.FC<StockChartProps> = ({ data, signal }) => {
               </ReferenceLine>
             </>
           )}
+
+          {fibonacci && Object.entries(fibonacci).map(([level, value]) => (
+            <ReferenceLine 
+              key={level} 
+              y={value} 
+              stroke="#a855f7" 
+              strokeDasharray="2 2" 
+              strokeOpacity={0.4}
+            >
+              <Label 
+                value={`Fib ${level}`} 
+                position="right" 
+                fill="#a855f7" 
+                fontSize={8} 
+                opacity={0.6}
+              />
+            </ReferenceLine>
+          ))}
 
           <Area 
             type="monotone" 
